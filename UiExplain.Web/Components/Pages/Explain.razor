@@ -1,0 +1,73 @@
+@page "/explain"
+@rendermode InteractiveServer
+@inject HttpClient HttpClient
+
+<PageTitle>Explain UI</PageTitle>
+
+<h1>Explain UI</h1>
+
+<p>This page analyzes uploaded UI images and provides explanations, issues, and suggestions.</p>
+
+<div class="d-flex flex-column align-items-start">
+    <UploadImageCard OnImageSelected="OnImageSelected" />
+    <button class="btn btn-primary mt-3" @onclick="ExplainImage" disabled="@(SelectedImage == null || IsLoading)">
+        @if (IsLoading) { <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> }
+        Explain
+    </button>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    <div class="alert alert-danger mt-3" role="alert">@ErrorMessage</div>
+}
+
+@if (Result != null)
+{
+    <ResultPanel Result="Result" />
+}
+
+@code {
+    private Microsoft.AspNetCore.Components.Forms.IBrowserFile? SelectedImage { get; set; }
+    private ExplainResult? Result { get; set; }
+    private bool IsLoading { get; set; }
+    private string? ErrorMessage { get; set; }
+
+    private void OnImageSelected(Microsoft.AspNetCore.Components.Forms.IBrowserFile? file)
+    {
+        SelectedImage = file;
+        Result = null; // Reset result when new image selected
+        ErrorMessage = null;
+    }
+
+    private async Task ExplainImage()
+    {
+        if (SelectedImage == null) return;
+
+        IsLoading = true;
+        ErrorMessage = null;
+        try
+        {
+            var content = new MultipartFormDataContent();
+            content.Add(new StreamContent(SelectedImage.OpenReadStream()), "image", SelectedImage.Name);
+
+            var response = await HttpClient.PostAsync("api/explainui", content);
+            if (response.IsSuccessStatusCode)
+            {
+                Result = await response.Content.ReadFromJsonAsync<ExplainResult>();
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                ErrorMessage = string.IsNullOrWhiteSpace(errorContent) ? "Error analyzing image." : errorContent;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+}

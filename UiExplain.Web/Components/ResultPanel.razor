@@ -1,0 +1,40 @@
+@using UiExplain.Web.Data
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>Analysis Result</h5>
+    </div>
+    <div class="card-body">
+        <h6 class="mt-3 mb-2">Summary</h6>
+        <p>@Result.Summary</p>
+
+        <h6 class="mt-3 mb-2">Main UI Elements</h6>
+        <ul class="list-group list-group-flush">
+            @foreach (var element in Result.MainUIElements)
+            {
+                <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>@element</li>
+            }
+        </ul>
+
+        <h6 class="mt-3 mb-2">UX Issues</h6>
+        <ul class="list-group list-group-flush">
+            @foreach (var issue in Result.UXIssues)
+            {
+                <li class="list-group-item"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>@issue</li>
+            }
+        </ul>
+
+        <h6 class="mt-3 mb-2">Accessibility Suggestions</h6>
+        <ul class="list-group list-group-flush">
+            @foreach (var suggestion in Result.AccessibilitySuggestions)
+            {
+                <li class="list-group-item"><i class="bi bi-info-circle-fill text-info me-2"></i>@suggestion</li>
+            }
+        </ul>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public ExplainResult Result { get; set; } = new();
+}

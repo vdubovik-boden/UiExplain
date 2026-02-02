@@ -1,0 +1,46 @@
+@page "/admin"
+@layout AdminLayout
+
+<PageTitle>Admin Dashboard</PageTitle>
+
+<h1>Admin Dashboard</h1>
+
+<p>View previous UI explanation summaries.</p>
+
+<div class="row">
+    @foreach (var summary in Summaries)
+    {
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@summary.Title</h5>
+                    <p class="card-text">@summary.Description</p>
+                    <small class="text-muted">@summary.Date.ToString("g")</small>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<SummaryItem> Summaries { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        // Fake in-memory data
+        Summaries = new List<SummaryItem>
+        {
+            new SummaryItem { Title = "Login Form Analysis", Description = "This UI appears to be a login form with username and password fields.", Date = DateTime.Now.AddDays(-1) },
+            new SummaryItem { Title = "Dashboard Review", Description = "A comprehensive dashboard with charts and navigation elements.", Date = DateTime.Now.AddDays(-2) },
+            new SummaryItem { Title = "Mobile App UI", Description = "Mobile interface with touch-friendly buttons and gestures.", Date = DateTime.Now.AddDays(-3) },
+            new SummaryItem { Title = "E-commerce Page", Description = "Product listing page with search and filter options.", Date = DateTime.Now.AddDays(-4) }
+        };
+    }
+
+    private class SummaryItem
+    {
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public DateTime Date { get; set; }
+    }
+}

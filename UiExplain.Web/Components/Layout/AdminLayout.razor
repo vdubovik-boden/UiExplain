@@ -1,0 +1,25 @@
+@inherits LayoutComponentBase
+
+<div class="admin-layout">
+    <header class="bg-dark text-white p-3">
+        <h4>Admin Area</h4>
+    </header>
+    <div class="d-flex">
+        <main class="flex-fill p-4">
+            @Body
+        </main>
+        <nav class="bg-light sidebar" style="width: 250px; min-height: 100vh;">
+            <div class="p-3">
+                <h5>Admin Menu</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/">Overview</NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/explain">Explain UI</NavLink>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
