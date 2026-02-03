@@ -27,6 +27,7 @@ Built with .NET 9, the app emphasizes production-ready practices such as input v
 2. Set API keys in `UiExplain.Api\appsettings.json`:
    - `HuggingFaceApiKey`
    - `GroqApiKey`
+   NOTE: Could be provided in a direct chat if required  
 3. Run both projects (Web and API) simultaneously.
 4. Navigate to the Web app and upload a UI screenshot on the `/explain` page.
 
